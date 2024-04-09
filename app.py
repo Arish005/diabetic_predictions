@@ -37,7 +37,7 @@ def load_model():
     try:
         # Load the model
         filename = 'diabetes-prediction-rfc-model.pkl'
-        classifier = joblib.load(filename)
+        classifier = pickle.load(filename)
         return classifier
     except Exception as e:
         st.error(f"An error occurred while loading the model: {e}")
