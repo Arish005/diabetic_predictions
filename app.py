@@ -31,7 +31,7 @@
 import streamlit as st
 import joblib
 import numpy as np
-
+import pickle
 # Load the Random Forest Classifier model
 def load_model():
     try:
