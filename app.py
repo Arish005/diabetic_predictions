@@ -1,34 +1,30 @@
-# Importing essential libraries
-from flask import Flask, render_template, request
+import streamlit as st
 import pickle
 import numpy as np
 
-# Load the Random Forest CLassifier model
+# Load the Random Forest Classifier model
 filename = 'diabetes-prediction-rfc-model.pkl'
 classifier = pickle.load(open(filename, 'rb'))
 
-app = Flask(__name__)
+def main():
+    st.title('Diabetes Prediction')
 
-@app.route('/')
-def home():
-	return render_template('index.html')
+    pregnancies = st.number_input('Pregnancies', min_value=0, max_value=17, value=0)
+    glucose = st.number_input('Glucose', min_value=0, max_value=200, value=0)
+    blood_pressure = st.number_input('Blood Pressure', min_value=0, max_value=122, value=0)
+    skin_thickness = st.number_input('Skin Thickness', min_value=0, max_value=99, value=0)
+    insulin = st.number_input('Insulin', min_value=0, max_value=846, value=0)
+    bmi = st.number_input('BMI', min_value=0.0, max_value=67.1, value=0.0)
+    dpf = st.number_input('Diabetes Pedigree Function', min_value=0.078, max_value=2.42, value=0.078)
+    age = st.number_input('Age', min_value=21, max_value=81, value=21)
 
-@app.route('/predict', methods=['POST'])
-def predict():
-    if request.method == 'POST':
-        preg = int(request.form['pregnancies'])
-        glucose = int(request.form['glucose'])
-        bp = int(request.form['bloodpressure'])
-        st = int(request.form['skinthickness'])
-        insulin = int(request.form['insulin'])
-        bmi = float(request.form['bmi'])
-        dpf = float(request.form['dpf'])
-        age = int(request.form['age'])
-        
-        data = np.array([[preg, glucose, bp, st, insulin, bmi, dpf, age]])
-        my_prediction = classifier.predict(data)
-        
-        return render_template('result.html', prediction=my_prediction)
+    if st.button('Predict'):
+        data = np.array([[pregnancies, glucose, blood_pressure, skin_thickness, insulin, bmi, dpf, age]])
+        prediction = classifier.predict(data)
+        if prediction[0] == 1:
+            st.error('You might have diabetes.')
+        else:
+            st.success('You may not have diabetes.')
 
 if __name__ == '__main__':
-	app.run(debug=True)
+    main()
