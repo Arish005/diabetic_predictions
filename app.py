@@ -33,11 +33,21 @@ import joblib
 import numpy as np
 import pickle
 # Load the Random Forest Classifier model
+# def load_model():
+#     try:
+#         # Load the model
+#         filename = 'diabetes-prediction-rfc-model.pkl'
+#         classifier = pickle.load(open(filename, 'rb'))
+#         return classifier
+#     except Exception as e:
+#         st.error(f"An error occurred while loading the model: {e}")
+#         return None
 def load_model():
     try:
         # Load the model
-        filename = 'diabetes-prediction-rfc-model.pkl'
-        classifier = pickle.load(open(filename, 'rb'))
+        filename = 'trained_model.pkl'
+        with open(filename, 'rb') as file:
+            classifier = joblib.load(file)
         return classifier
     except Exception as e:
         st.error(f"An error occurred while loading the model: {e}")
